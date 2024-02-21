@@ -1,7 +1,7 @@
 const catchError = require("../utils/catchError");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const { where } = require("sequelize");
+
 
 const getAll = catchError(async (req, res) => {
   const results = await User.findAll();
@@ -36,16 +36,17 @@ const update = catchError(async (req, res) => {
 });
 
 const login = catchError(async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ where: { email } });
+  const { email, password } = req.body
 
-  if (!user) return res.sendStatus(401).json({ error: "User not Found" });
+  const user = await User.findOne({ where: { email } })
+  if (!user) return res.status(401).json({ error: 'User not found' })
 
-  const token = jwt.sign({ user }, process.env.TOKEN_SECRET, {
-    expiresIn: "1d",
-  });
-
-  return res.json(user, token);
+  const token = jwt.sign(
+    { user },
+    process.env.TOKEN_SECRET,
+    { expiresIn: "1d" }
+  )
+  return res.json({ user, token })
 });
 
 module.exports = {
