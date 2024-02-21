@@ -1,6 +1,7 @@
 const catchError = require("../utils/catchError");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt')
 
 
 const getAll = catchError(async (req, res) => {
@@ -40,6 +41,10 @@ const login = catchError(async (req, res) => {
 
   const user = await User.findOne({ where: { email } })
   if (!user) return res.status(401).json({ error: 'User not found' })
+
+  // Compare password
+  const isValid = await bcrypt.compare(password, user.password)
+  if(!isValid) return res.status(401).json({error:'Invalid Credentials'})
 
   const token = jwt.sign(
     { user },
