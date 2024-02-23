@@ -16,7 +16,9 @@ beforeAll(async () => {
     password: "fernando1234",
   };
 
-  const res = await request(app).post(`${URL_BASE_USERS}/login`).send(user);
+  const res = await request(app)
+  .post(`${URL_BASE_USERS}/login`)
+  .send(user);
 
   TOKEN = res.body.token;
 });
