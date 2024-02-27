@@ -5,8 +5,6 @@ const router = require('./routes');
 const errorHandler = require('./utils/errorHandler');
 require('dotenv').config();
 const path = require("path")
-const public = "public"
-
 
 // Esta es nuestra aplicación
 const app = express();
@@ -18,7 +16,7 @@ app.use(helmet({
 }));
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, public)));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(router);
 app.get('/', (req, res) => {
