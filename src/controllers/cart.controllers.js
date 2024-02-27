@@ -23,12 +23,33 @@ const getAll = catchError(async (req, res) => {
   return res.json(results);
 });
 
+const getOne = catchError(async (req, res) => {
+
+  const {id} = req.params
+
+  const userId = req.user.id
+  const results = await Cart.findByPk(id, {
+    where: { userId },
+    include: [
+      // Product
+      {
+        model: Product,
+        attributes: { exclude: ["updatedAt", "createdAt"] },
+        include: {
+          model: Category,
+          attributes: ['name']
+        }
+      }
+    ]
+
+  });
+  return res.json(results);
+});
+
 const create = catchError(async (req, res) => {
   const userId = req.user.id
-
-  const {quantity, productId } = req.body
-  const newBody = {userId, quantity, productId}
-
+  const { quantity, productId } = req.body
+  const newBody = { userId, quantity, productId }
   const result = await Cart.create(newBody);
   return res.status(201).json(result);
 });
@@ -37,7 +58,7 @@ const remove = catchError(async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id
   const result = await Cart.destroy({ where: { id, userId } });
-  if(!result) return res.sendStatus(404)
+  if (!result) return res.sendStatus(404)
   return res.sendStatus(204);
 });
 
@@ -45,6 +66,8 @@ const update = catchError(async (req, res) => {
   const userId = req.user.id
   const { id } = req.params;
   const { quantity } = req.body
+
+
   const result = await Cart.update(
     { quantity },
     { where: { id, userId }, returning: true }
@@ -55,6 +78,7 @@ const update = catchError(async (req, res) => {
 
 module.exports = {
   getAll,
+  getOne,
   create,
   remove,
   update
