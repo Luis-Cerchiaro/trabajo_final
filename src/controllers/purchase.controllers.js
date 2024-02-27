@@ -42,3 +42,8 @@ const create = catchError(async (req, res) => {
   return res.status(201).json(result)
 
 })
+
+module.exports = {
+  getAll,
+  create
+}
