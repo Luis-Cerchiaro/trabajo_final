@@ -14,7 +14,7 @@ const create = catchError(async (req, res) => {
 const remove = catchError(async (req, res) => {
   const { id } = req.params;
   await Category.destroy({ where: { id } });
-  return res.sendStatus(204);
+  return res.status(204);
 });
 
 module.exports = {

@@ -17,8 +17,8 @@ const create = catchError(async (req, res) => {
 const remove = catchError(async (req, res) => {
   const { id } = req.params;
   const result = await User.destroy({ where: { id } });
-  if (!result) return res.sendStatus(404);
-  return res.sendStatus(204);
+  if (!result) return res.status(404);
+  return res.status(204);
 });
 
 const update = catchError(async (req, res) => {
@@ -32,7 +32,7 @@ const update = catchError(async (req, res) => {
     where: { id },
     returning: true,
   });
-  if (result[0] === 0) return res.sendStatus(404);
+  if (result[0] === 0) return res.status(404);
   return res.json(result[1][0]);
 });
 
