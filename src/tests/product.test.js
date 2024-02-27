@@ -3,7 +3,7 @@ const request = require("supertest")
 const app = require("../app")
 const Category = require("../models/Category")
 
-//gets (soin publicos)😊
+//gets (son publicos)😊
 //todos los demas son 🔐
 
 const URL_BASE_USER = '/users/login'

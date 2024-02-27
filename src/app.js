@@ -5,7 +5,7 @@ const router = require('./routes');
 const errorHandler = require('./utils/errorHandler');
 require('dotenv').config();
 const path = require("path")
-const public = 'public'
+const public = "public"
 
 
 // Esta es nuestra aplicación

@@ -33,9 +33,9 @@ const create = catchError(async (req, res) => {
 
   console.log(cart);
 
-  if (!cart) return res.status(404)
+  if (!cart) return res.sendStatus(404)
   const result = await Purchase.bulkCreate(cart)
-  if (!result) return res.status(404)
+  if (!result) return res.sendStatus(404)
 
   await Cart.destroy({ where: { userId } })
 

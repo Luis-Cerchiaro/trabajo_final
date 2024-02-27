@@ -24,9 +24,7 @@ const getAll = catchError(async (req, res) => {
 });
 
 const getOne = catchError(async (req, res) => {
-
-  const {id} = req.params
-
+  const { id } = req.params
   const userId = req.user.id
   const results = await Cart.findByPk(id, {
     where: { userId },
@@ -58,8 +56,8 @@ const remove = catchError(async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id
   const result = await Cart.destroy({ where: { id, userId } });
-  if (!result) return res.status(404)
-  return res.status(204);
+  if (!result) return res.sendStatus(404)
+  return res.sendStatus(204);
 });
 
 const update = catchError(async (req, res) => {
@@ -72,7 +70,7 @@ const update = catchError(async (req, res) => {
     { quantity },
     { where: { id, userId }, returning: true }
   );
-  if (result[0] === 0) return res.status(404);
+  if (result[0] === 0) return res.sendStatus(404);
   return res.json(result[1][0]);
 });
 

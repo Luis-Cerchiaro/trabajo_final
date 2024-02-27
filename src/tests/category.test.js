@@ -4,7 +4,7 @@ const app = require("../app")
 const URL_BASE_USERS = '/users'
 const URL_BASE = '/categories'
 const category = {
-  name: 'Tecnologia'
+  name: 'deportes'
 }
 
 let TOKEN
