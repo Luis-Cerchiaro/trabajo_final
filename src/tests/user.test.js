@@ -1,11 +1,10 @@
-require('../models')
-
 const request = require("supertest");
 const app = require("../app");
+require("../models");
 
 const URL_BASE = "/users";
-let TOKEN
-let userId
+let TOKEN;
+let userId;
 
 const user = {
   firstName: "Rene",
@@ -18,95 +17,76 @@ const user = {
 beforeAll(async () => {
   const user = {
     email: "fernando@gmail.com",
-    password: "fernando1234"
-  }
-  const res = await request(app)
-  .post(`${URL_BASE}/login`)
-  .send(user)
+    password: "fernando1234",
+  };
+  const res = await request(app).post(`${URL_BASE}/login`).send(user);
 
   //console.log(res.body)
-  TOKEN = res.body.token
+  TOKEN = res.body.token;
   //console.log(TOKEN)
-}
+});
 
-)
+test("GET -> 'URL_BASE', should return status code 201, res.body to be defined and res.body.length === 1", async () => {
+  const res = await request(app)
+    .get(URL_BASE)
+    .set("Authorization", `Bearer ${TOKEN}`);
 
-test ("GET -> 'URL_BASE', should return status code 201, res.body to be defined and res.body.length === 1",
-async () => {
-  const res = await request(app).get(URL_BASE).set('Authorization', `Bearer ${TOKEN}`)
-
-  expect(res.status).toBe(200)
-  expect(res.body).toBeDefined()
-  expect(res.body).toHaveLength(1)
-}
-)
+  expect(res.status).toBe(200);
+  expect(res.body).toBeDefined();
+  expect(res.body).toHaveLength(1);
+});
 
 test("POST -> 'URL_BASE', should return status code 201, res.body to be defined and res.body.firstName === user.firstName", async () => {
   const res = await request(app).post(URL_BASE).send(user);
 
-  userId = res.body.id
+  userId = res.body.id;
 
-  expect(res.status).toBe(201)
-  expect(res.body).toBeDefined()
-  expect(res.body.firstName).toBe(user.firstName)
+  expect(res.status).toBe(201);
+  expect(res.body).toBeDefined();
+  expect(res.body.firstName).toBe(user.firstName);
 });
 
-test("PUT -> 'URL_BASE/:id', should return status code 200, res.body to be defined and res.body.firstName = 'Frednerys' ", 
-async () => {
-  const res= await request(app)
-  .put(`${URL_BASE}/${userId}`)
-  .send({firstName: "Frednerys"})
-  .set('Authorization', `Bearer ${TOKEN}`)
+test("PUT -> 'URL_BASE/:id', should return status code 200, res.body to be defined and res.body.firstName = 'Frednerys' ", async () => {
+  const res = await request(app)
+    .put(`${URL_BASE}/${userId}`)
+    .send({ firstName: "Frednerys" })
+    .set("Authorization", `Bearer ${TOKEN}`);
 
-  expect(res.status).toBe(200)
-  expect(res.body).toBeDefined()
-  expect(res.body.firstName).toBe("Frednerys")
-}
-)
+  expect(res.status).toBe(200);
+  expect(res.body).toBeDefined();
+  expect(res.body.firstName).toBe("Frednerys");
+});
 
-test("POST -> 'URL_BASE/login', should return status code 200, res.body to be defined, res.body.user.email === user.email and res.body.token to be defined' ", 
-async () => {
+test("POST -> 'URL_BASE/login', should return status code 200, res.body to be defined, res.body.user.email === user.email and res.body.token to be defined' ", async () => {
+  const userLogin = {
+    email: "rener@gmail.com",
+    password: "rene1234",
+  };
 
-const userLogin= {
-  email: "rener@gmail.com",
-  password: "rene1234",
-}
+  const res = await request(app).post(`${URL_BASE}/login`).send(userLogin);
 
-  const res= await request(app)
-  .post(`${URL_BASE}/login`)
-  .send(userLogin)
- 
-  expect(res.status).toBe(200)
-  expect(res.body).toBeDefined()
-  expect(res.body.user.email).toBe(userLogin.email)
-  expect(res.body.token).toBeDefined()
-}
-)
+  expect(res.status).toBe(200);
+  expect(res.body).toBeDefined();
+  expect(res.body.user.email).toBe(userLogin.email);
+  expect(res.body.token).toBeDefined();
+});
 
-test("POST -> 'URL_BASE/login', should return status code 401", 
-async () => {
+test("POST -> 'URL_BASE/login', should return status code 401", async () => {
+  const userLogin = {
+    email: "rener@gmail.com",
+    password: "rene12341",
+  };
 
-const userLogin= {
-  email: "rener@gmail.com",
-  password: "rene12341",
-}
+  const res = await request(app).post(`${URL_BASE}/login`).send(userLogin);
 
-  const res= await request(app)
-  .post(`${URL_BASE}/login`)
-  .send(userLogin)
- 
-  expect(res.status).toBe(401)
-
-}
-)
+  expect(res.status).toBe(401);
+});
 
 test("DELETE -> 'URL_BASE/:id', should return status code 204", async () => {
-
   const res = await request(app)
-  .delete(`${URL_BASE}/${userId}`)
-  .set('Authorization', `Bearer ${TOKEN}`)
+    .delete(`${URL_BASE}/${userId}`)
+    .set("Authorization", `Bearer ${TOKEN}`);
 
-  expect(res.status).toBe(204)
-
-}
-)
+    console.log(res.body)
+  expect(res.status).toBe(204);
+});

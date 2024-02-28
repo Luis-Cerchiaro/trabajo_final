@@ -18,7 +18,7 @@ const remove = catchError(async (req, res) => {
   const { id } = req.params;
   const result = await User.destroy({ where: { id } });
   if (!result) return res.status(404);
-  return res.status(204);
+  return res.status(204).json("User deleted")
 });
 
 const update = catchError(async (req, res) => {
