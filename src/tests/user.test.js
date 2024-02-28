@@ -87,6 +87,6 @@ test("DELETE -> 'URL_BASE/:id', should return status code 204", async () => {
     .delete(`${URL_BASE}/${userId}`)
     .set("Authorization", `Bearer ${TOKEN}`);
 
-    console.log(res.body)
+    //console.log(res.body)
   expect(res.status).toBe(204);
 });
